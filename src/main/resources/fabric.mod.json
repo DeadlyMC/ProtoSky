@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "pt-skyblock",
+  "version": "1.0.0",
+
+  "name": "PT-Skyblock",
+  "description": "Skyblock mod for Prototech",
+  "authors": [
+    "DeadlyMC"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/pt-skyblock/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+    ]
+  },
+  "mixins": [
+    "pt-skyblock.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.15.x",
+    "fabricloader": ">=0.4.0",
+    "carpet": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

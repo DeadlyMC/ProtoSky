@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "package": "pt.skyblock.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MinecraftServer_noopMixin",
+    "LevelGeneratorTypeMixin",
+    "OverworldDimensionMixin",
+    "TheEndDimensionMixin",
+    "TheNetherDimensionMixin",
+    "ProtoChunkAccessor",
+    "StructurePieceAccessor",
+    "StoneBrickRandomizerMixin",
+    "CorridorAccessor",
+    "SquareRoomAccessor",
+    "FiveWayCrossingAccessor",
+    "ChestCorridorMixin",
+    "LibraryAccessor",
+    "SmallCorridorAccessor",
+    "CorridorRightTurnMixin",
+    "CorridorLeftTurnMixin",
+    "BridgeEndAccessor",
+    "EnderDragonFightMixin"
+  ],
+  "client": [
+    "MinecraftClient_noopMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
