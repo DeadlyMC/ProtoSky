@@ -55,7 +55,7 @@ public class PillarHelper
             }
         }
         
-        //BlockPos crystalPos = new BlockPos(spike.getCenterX(), spike.getHeight(), spike.getCenterZ());
-        //StructureHelper.setBlockInChunk(chunk, crystalPos, Blocks.BEDROCK.getDefaultState());
+        BlockPos crystalPos = new BlockPos(spike.getCenterX(), spike.getHeight(), spike.getCenterZ());
+        StructureHelper.setBlockInChunk(chunk, crystalPos, Blocks.BEDROCK.getDefaultState());
     }
 }

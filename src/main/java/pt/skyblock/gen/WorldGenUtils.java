@@ -1,10 +1,13 @@
 package pt.skyblock.gen;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.util.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.*;
+import net.minecraft.world.ChunkRegion;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.BiomeSourceType;
@@ -19,9 +22,7 @@ import net.minecraft.world.gen.chunk.*;
 import net.minecraft.world.level.LevelGeneratorType;
 import pt.skyblock.mixins.ProtoChunkAccessor;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class WorldGenUtils
@@ -76,12 +77,19 @@ public class WorldGenUtils
         StructureHelper.processNetherFortress(chunk, world);
         Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
     }
-    
+
+    public static List<String> KEEP_ENTITY_IDS = new ArrayList<String>(){
+        {
+            add("minecraft:end_crystal");
+        }
+    };
+
     private static void clearChunk(ProtoChunk chunk, IWorld world)
     {
         deleteBlocks(chunk, world);
         // erase entities
-        chunk.getEntities().clear();
+        chunk.getEntities().removeIf(e -> !KEEP_ENTITY_IDS.contains(e.getString("id")));
+
         try
         {
             ((ServerLightingProvider) chunk.getLightingProvider()).light(chunk, true).get();
