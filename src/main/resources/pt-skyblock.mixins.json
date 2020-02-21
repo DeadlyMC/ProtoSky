@@ -20,7 +20,8 @@
     "CorridorRightTurnMixin",
     "CorridorLeftTurnMixin",
     "BridgeEndAccessor",
-    "EnderDragonFightMixin"
+    "EnderDragonFightMixin",
+    "ChunkGeneratorMixin"
   ],
   "client": [
     "MinecraftClient_noopMixin"

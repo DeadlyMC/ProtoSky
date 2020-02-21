@@ -1,11 +1,8 @@
 package pt.skyblock.gen;
 
-import com.google.common.collect.Lists;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonFight;
-import net.minecraft.entity.decoration.EnderCrystalEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.NetherFortressGenerator;
 import net.minecraft.structure.StrongholdGenerator;
@@ -21,12 +18,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
-import net.minecraft.world.gen.feature.EndSpikeFeature;
 import pt.skyblock.mixins.*;
-import pt.skyblock.util.IEnderDragonFight;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 public class StructureHelper
@@ -265,17 +258,6 @@ public class StructureHelper
                             FortressHelper.generateBridgeEnd(chunk, (NetherFortressGenerator.BridgeEnd) piece, new Random(startPosLong));
                     }
                 }
-            }
-        }
-    }
-    
-    public static void generatePillars(ProtoChunk chunk, IWorld world, EnderDragonFight fight)
-    {
-        for (EndSpikeFeature.Spike spike : EndSpikeFeature.getSpikes(world))
-        {
-            if (spike.isInChunk(new BlockPos(spike.getCenterX(), 45, spike.getCenterZ())))
-            {
-                PillarHelper.generateSpike(chunk, world, new Random(), spike, fight);
             }
         }
     }
