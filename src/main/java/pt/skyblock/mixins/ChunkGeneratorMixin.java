@@ -1,5 +1,6 @@
 package pt.skyblock.mixins;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkRegion;
@@ -21,8 +22,8 @@ public abstract class ChunkGeneratorMixin
     @Shadow @Final protected IWorld world;
     
     // CREDITS : @modmuss50
-    @Inject(method = "generateFeatures", at = @At("RETURN"))
-    public void generateFeatures(ChunkRegion region, CallbackInfo ci)
+    @Inject(method = "populateEntities", at = @At("RETURN"))
+    public void onPopulateEntities(ChunkRegion region, CallbackInfo ci)
     {
         LevelGeneratorType type = this.world.getLevelProperties().getGeneratorType();
         if (type != WorldGenUtils.LEVEL_GENERATOR_TYPE || region.getWorld().getDimension().getType() != DimensionType.THE_END)
@@ -43,7 +44,8 @@ public abstract class ChunkGeneratorMixin
                 for (int y = 0; y < 256; y++)
                 {
                     mutable.set(chunkX + x, y, chunkZ + z);
-                    if (region.getBlockState(mutable).getBlock() == Blocks.END_STONE || region.getBlockState(mutable).getBlock() == Blocks.CHORUS_FLOWER || region.getBlockState(mutable).getBlock() == Blocks.CHORUS_PLANT)
+                    Block block = region.getBlockState(mutable).getBlock();
+                    if (block == Blocks.END_STONE || block == Blocks.CHORUS_FLOWER || block == Blocks.CHORUS_PLANT)
                     {
                         region.setBlockState(mutable, Blocks.AIR.getDefaultState(), 0);
                     }

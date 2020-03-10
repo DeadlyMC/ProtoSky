@@ -276,30 +276,8 @@ public class StructureHelper
                 {
                     if (piece.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
                     {
-                        if (piece instanceof StrongholdGenerator.Corridor)
-                            StrongholdHelper.generateStrongholdCorridor(chunk, (StrongholdGenerator.Corridor) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.PrisonHall)
-                            StrongholdHelper.generateStrongholdPrisonHall(chunk, (StrongholdGenerator.PrisonHall) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.LeftTurn)
-                            StrongholdHelper.generateStrongholdLeftTurn(chunk, (StrongholdGenerator.LeftTurn) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.RightTurn)
-                            StrongholdHelper.generateStrongholdRightTurn(chunk, (StrongholdGenerator.RightTurn) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.SquareRoom)
-                            StrongholdHelper.generateStrongholdSquareRoom(chunk, (StrongholdGenerator.SquareRoom) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.Stairs)
-                            StrongholdHelper.generateStrongholdStairs(chunk, (StrongholdGenerator.Stairs) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.SpiralStaircase)
-                            StrongholdHelper.generateStrongholdSpiralStaircase(chunk, (StrongholdGenerator.SpiralStaircase) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.FiveWayCrossing)
-                            StrongholdHelper.generateStrongholdFiveWayCrossing(chunk, (StrongholdGenerator.FiveWayCrossing) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.ChestCorridor)
-                            StrongholdHelper.generateStrongholdChestCorridor(chunk, (StrongholdGenerator.ChestCorridor) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.Library)
-                            StrongholdHelper.generateStrongholdLibrary(chunk, (StrongholdGenerator.Library) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.PortalRoom)
+                        if (piece instanceof StrongholdGenerator.PortalRoom)
                             StrongholdHelper.generateStrongholdPortalRoom(chunk, (StrongholdGenerator.PortalRoom) piece, new Random(startPosLong));
-                        else if (piece instanceof StrongholdGenerator.SmallCorridor)
-                            StrongholdHelper.generateStrongholdSmallCorridor(chunk, (StrongholdGenerator.SmallCorridor) piece, new Random(startPosLong));
                     }
                 }
             }
