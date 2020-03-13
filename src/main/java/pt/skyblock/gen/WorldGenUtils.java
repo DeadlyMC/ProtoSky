@@ -16,7 +16,6 @@ import net.minecraft.world.biome.source.VanillaLayeredBiomeSourceConfig;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.TheEndDimension;
 import net.minecraft.world.gen.chunk.*;
 import net.minecraft.world.level.LevelGeneratorType;
@@ -70,25 +69,15 @@ public class WorldGenUtils
             heightmapEntry.getValue().setTo(emptyHeightmap);
         }
         StructureHelper.processStronghold(chunk, world);
-        if (world.getDimension().getType() == DimensionType.THE_END)
-        {
-            StructureHelper.generatePillars(chunk, world, ((TheEndDimension) world.getDimension()).method_12513());
-        }
         StructureHelper.processNetherFortress(chunk, world);
         Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
     }
-
-    public static List<String> KEEP_ENTITY_IDS = new ArrayList<String>(){
-        {
-            add("minecraft:end_crystal");
-        }
-    };
 
     private static void clearChunk(ProtoChunk chunk, IWorld world)
     {
         deleteBlocks(chunk, world);
         // erase entities
-        chunk.getEntities().removeIf(e -> !KEEP_ENTITY_IDS.contains(e.getString("id")));
+        chunk.getEntities().clear();
 
         try
         {
@@ -135,13 +124,6 @@ public class WorldGenUtils
         public SkyBlockFloatingIslandsGenerator(World world, BiomeSource biomeSource, FloatingIslandsChunkGeneratorConfig config)
         {
             super(world, biomeSource, config);
-        }
-        
-        @Override
-        public void populateEntities(ChunkRegion region)
-        {
-            ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
-            clearChunk(chunk, world);
         }
     }
 }

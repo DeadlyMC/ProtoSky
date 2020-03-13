@@ -3,7 +3,6 @@
   "package": "pt.skyblock.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MinecraftServer_noopMixin",
     "LevelGeneratorTypeMixin",
     "OverworldDimensionMixin",
     "TheEndDimensionMixin",
@@ -20,10 +19,10 @@
     "CorridorRightTurnMixin",
     "CorridorLeftTurnMixin",
     "BridgeEndAccessor",
-    "EnderDragonFightMixin"
+    "EnderDragonFightMixin",
+    "ChunkGeneratorMixin"
   ],
   "client": [
-    "MinecraftClient_noopMixin"
   ],
   "injectors": {
     "defaultRequire": 1
