@@ -21,6 +21,7 @@ import java.util.Random;
 
 import static pt.skyblock.gen.StructureHelper.*;
 
+// Redundant class - For future use
 public class FortressHelper
 {
     public static void generateBridge(ProtoChunk chunk, NetherFortressGenerator.Bridge bridge, Random random)

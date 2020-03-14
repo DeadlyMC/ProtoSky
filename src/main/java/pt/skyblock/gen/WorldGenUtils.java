@@ -1,6 +1,8 @@
 package pt.skyblock.gen;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.util.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +18,7 @@ import net.minecraft.world.biome.source.VanillaLayeredBiomeSourceConfig;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.dimension.TheEndDimension;
 import net.minecraft.world.gen.chunk.*;
 import net.minecraft.world.level.LevelGeneratorType;
@@ -69,7 +72,8 @@ public class WorldGenUtils
             heightmapEntry.getValue().setTo(emptyHeightmap);
         }
         StructureHelper.processStronghold(chunk, world);
-        StructureHelper.processNetherFortress(chunk, world);
+        if (world.getDimension().getType() == DimensionType.THE_END)
+            StructureHelper.generatePillars(chunk, world, ((TheEndDimension) world.getDimension()).method_12513());
         Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
     }
 
@@ -77,7 +81,28 @@ public class WorldGenUtils
     {
         deleteBlocks(chunk, world);
         // erase entities
-        chunk.getEntities().clear();
+        if (world.getDimension().getType() != DimensionType.THE_END)
+        {
+            chunk.getEntities().clear();
+        }
+        else
+        {
+            chunk.getEntities().removeIf(tag -> {
+                String id = tag.getString("id");
+               if (id.equals("minecraft:end_crystal") || id.equals("minecraft:shulker"))
+               {
+                   return false;
+               }
+               else if (id.equals("minecraft:item_frame"))
+               {
+                   return false;
+               }
+               else
+               {
+                   return true;
+               }
+            });
+        }
 
         try
         {
@@ -124,6 +149,13 @@ public class WorldGenUtils
         public SkyBlockFloatingIslandsGenerator(World world, BiomeSource biomeSource, FloatingIslandsChunkGeneratorConfig config)
         {
             super(world, biomeSource, config);
+        }
+    
+        @Override
+        public void populateEntities(ChunkRegion region)
+        {
+            ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
+            clearChunk(chunk, world);
         }
     }
 }

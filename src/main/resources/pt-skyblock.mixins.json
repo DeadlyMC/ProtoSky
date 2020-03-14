@@ -19,8 +19,7 @@
     "CorridorRightTurnMixin",
     "CorridorLeftTurnMixin",
     "BridgeEndAccessor",
-    "EnderDragonFightMixin",
-    "ChunkGeneratorMixin"
+    "EnderDragonFightMixin"
   ],
   "client": [
   ],

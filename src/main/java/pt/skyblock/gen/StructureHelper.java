@@ -3,6 +3,7 @@ package pt.skyblock.gen;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.NetherFortressGenerator;
 import net.minecraft.structure.StrongholdGenerator;
@@ -18,6 +19,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
+import net.minecraft.world.gen.feature.EndSpikeFeature;
 import pt.skyblock.mixins.*;
 
 import java.util.Random;
@@ -214,50 +216,13 @@ public class StructureHelper
         }
     }
     
-    public static void processNetherFortress(ProtoChunk chunk, IWorld world)
+    public static void generatePillars(ProtoChunk chunk, IWorld world, EnderDragonFight fight)
     {
-        for (long startPosLong : chunk.getStructureReferences("Fortress"))
+        for (EndSpikeFeature.Spike spike : EndSpikeFeature.getSpikes(world))
         {
-            ChunkPos startPos = new ChunkPos(startPosLong);
-            ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
-            StructureStart fortress = startChunk.getStructureStart("Fortress");
-            ChunkPos pos = chunk.getPos();
-            if (fortress != null && fortress.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
+            if (spike.isInChunk(new BlockPos(spike.getCenterX(), 45, spike.getCenterZ())))
             {
-                for (StructurePiece piece : fortress.getChildren())
-                {
-                    if (piece.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
-                    {
-                        if (piece instanceof NetherFortressGenerator.Bridge)
-                            FortressHelper.generateBridge(chunk, (NetherFortressGenerator.Bridge) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.BridgeCrossing)
-                            FortressHelper.generateBridgeCrossing(chunk, (NetherFortressGenerator.BridgeCrossing) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.BridgeSmallCrossing)
-                            FortressHelper.generateBridgeSmallCrossing(chunk, (NetherFortressGenerator.BridgeSmallCrossing) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.BridgeStairs)
-                            FortressHelper.generateBridgeStairs(chunk, (NetherFortressGenerator.BridgeStairs) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.BridgePlatform)
-                            FortressHelper.generateBridgePlatform(chunk, (NetherFortressGenerator.BridgePlatform) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.CorridorExit)
-                            FortressHelper.generateCorridorExit(chunk, (NetherFortressGenerator.CorridorExit) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.SmallCorridor)
-                            FortressHelper.generateSmallCorridor(chunk, (NetherFortressGenerator.SmallCorridor) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.CorridorRightTurn)
-                            FortressHelper.generateCorridorRightTurn(chunk, (NetherFortressGenerator.CorridorRightTurn) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.CorridorLeftTurn)
-                            FortressHelper.generateCorridorLeftTurn(chunk, (NetherFortressGenerator.CorridorLeftTurn) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.CorridorStairs)
-                            FortressHelper.generateCorridorStairs(chunk, (NetherFortressGenerator.CorridorStairs) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.CorridorBalcony)
-                            FortressHelper.generateCorridorBalcony(chunk, (NetherFortressGenerator.CorridorBalcony) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.CorridorCrossing)
-                            FortressHelper.generateCorridorCrossing(chunk, (NetherFortressGenerator.CorridorCrossing) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.CorridorNetherWartsRoom)
-                            FortressHelper.generateCorridorNetherWartsRoom(chunk, (NetherFortressGenerator.CorridorNetherWartsRoom) piece, new Random(startPosLong));
-                        else if (piece instanceof NetherFortressGenerator.BridgeEnd)
-                            FortressHelper.generateBridgeEnd(chunk, (NetherFortressGenerator.BridgeEnd) piece, new Random(startPosLong));
-                    }
-                }
+                PillarHelper.generateSpike(chunk, world, new Random(), spike, fight);
             }
         }
     }
