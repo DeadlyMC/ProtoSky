@@ -1,9 +1,8 @@
 # PT-Skyblock
-Prototech skyblock mod is a fabric-carpet extension mod.
+Prototech skyblock mod.
 
 # Requirements (Mod users)
 - Fabric Installer : https://fabricmc.net/use/
-- fabric-carpet mod (in your mods folder)
 
 ## Compiling
 - Clone this repo.
