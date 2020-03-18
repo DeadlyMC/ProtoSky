@@ -2,8 +2,6 @@ package pt.skyblock.gen;
 
 import net.minecraft.block.*;
 import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.block.enums.SlabType;
-import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.structure.StrongholdGenerator;
@@ -12,8 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.chunk.ProtoChunk;
 import pt.skyblock.PTSkyblockRegistry;
-import pt.skyblock.mixins.*;
-import pt.skyblock.util.IChestCorridor;
 
 import java.util.Random;
 
