@@ -29,8 +29,6 @@ import java.util.concurrent.ExecutionException;
 
 public class WorldGenUtils
 {
-    public static LevelGeneratorType LEVEL_GENERATOR_TYPE;
-    
     public static LevelGeneratorOptions createOverworldChunkGenerator(LevelGeneratorType generator, Dynamic<?> dynamic)
     {
         ChunkGeneratorType<OverworldChunkGeneratorConfig, OverworldChunkGenerator> chunkGeneratorType = ChunkGeneratorType.SURFACE;
