@@ -2,10 +2,12 @@ package pt.skyblock.gen;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.Dynamic;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.util.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.IWorld;
@@ -89,15 +91,16 @@ public class WorldGenUtils
         }
         else
         {
-            chunk.getEntities().removeIf(tag -> {
-                String id = tag.getString("id");
+            chunk.getEntities().removeIf(tag ->
+            {
+               String id = tag.getString("id");
                if (id.equals("minecraft:end_crystal") || id.equals("minecraft:shulker"))
                {
                    return false;
                }
                else if (id.equals("minecraft:item_frame"))
                {
-                   tag.putBoolean("Fixed", true);
+                   tag.putBoolean("NoPop", true);
                    return false;
                }
                else

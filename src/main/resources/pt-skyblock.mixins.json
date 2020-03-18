@@ -18,7 +18,8 @@
     "CorridorRightTurnMixin",
     "CorridorLeftTurnMixin",
     "BridgeEndAccessor",
-    "EnderDragonFightMixin"
+    "EnderDragonFightMixin",
+    "ItemFrameEntityMixin"
   ],
   "client": [
   ],
