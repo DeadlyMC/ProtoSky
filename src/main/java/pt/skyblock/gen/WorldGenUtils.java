@@ -1,13 +1,11 @@
 package pt.skyblock.gen;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.Dynamic;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ServerLightingProvider;
-import net.minecraft.util.PackedIntegerArray;
+import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.IWorld;
@@ -46,7 +44,7 @@ public class WorldGenUtils
         CavesChunkGeneratorConfig config = ChunkGeneratorType.CAVES.createConfig();
         config.setDefaultBlock(Blocks.NETHERRACK.getDefaultState());
         config.setDefaultFluid(Blocks.LAVA.getDefaultState());
-        MultiNoiseBiomeSourceConfig multiNoiseBiomeSourceConfig = BiomeSourceType.MULTI_NOISE.getConfig(world.getSeed()).withBiomes(ImmutableSet.of(Biomes.NETHER_WASTES, Biomes.SOUL_SAND_VALLEY, Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST));
+        MultiNoiseBiomeSourceConfig multiNoiseBiomeSourceConfig = BiomeSourceType.MULTI_NOISE.getConfig(world.getSeed()).withBiomes(ImmutableList.of(Biomes.NETHER_WASTES, Biomes.SOUL_SAND_VALLEY, Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST, Biomes.BASALT_DELTAS));
         return new SkyBlockCavesGenerator(world, BiomeSourceType.MULTI_NOISE.applyConfig(multiNoiseBiomeSourceConfig), config);
     }
     
