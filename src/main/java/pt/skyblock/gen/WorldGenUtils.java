@@ -3,7 +3,6 @@ package pt.skyblock.gen;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Blocks;
-import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkRegion;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.LevelGeneratorType;
 import pt.skyblock.mixins.ProtoChunkAccessor;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class WorldGenUtils
 {
@@ -57,7 +55,7 @@ public class WorldGenUtils
         return new SkyBlockFloatingIslandsGenerator(world, BiomeSourceType.THE_END.applyConfig((BiomeSourceType.THE_END.getConfig(world.getSeed()))), config);
     }
     
-    private static void deleteBlocks(ProtoChunk chunk, IWorld world)
+    public static void deleteBlocks(ProtoChunk chunk, IWorld world)
     {
         ChunkSection[] sections = chunk.getSectionArray();
         Arrays.fill(sections, WorldChunk.EMPTY_SECTION);
@@ -77,9 +75,8 @@ public class WorldGenUtils
         Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
     }
 
-    private static void clearChunk(ProtoChunk chunk, IWorld world)
+    private static void clearEntities(ProtoChunk chunk, IWorld world)
     {
-        deleteBlocks(chunk, world);
         // erase entities
         if (world.getDimension().getType() != DimensionType.THE_END)
         {
@@ -105,15 +102,6 @@ public class WorldGenUtils
                }
             });
         }
-
-        try
-        {
-            ((ServerLightingProvider) chunk.getLightingProvider()).light(chunk, true).get();
-        }
-        catch (InterruptedException | ExecutionException e)
-        {
-            e.printStackTrace();
-        }
     }
     
     public static class SkyBlockOverworldGenerator extends OverworldChunkGenerator
@@ -127,7 +115,7 @@ public class WorldGenUtils
         public void populateEntities(ChunkRegion region)
         {
             ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
-            clearChunk(chunk, world);
+            clearEntities(chunk, world);
         }
     }
     
@@ -142,7 +130,7 @@ public class WorldGenUtils
         public void populateEntities(ChunkRegion region)
         {
             ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
-            clearChunk(chunk, world);
+            clearEntities(chunk, world);
         }
     }
     
@@ -157,7 +145,7 @@ public class WorldGenUtils
         public void populateEntities(ChunkRegion region)
         {
             ProtoChunk chunk = (ProtoChunk) region.getChunk(region.getCenterChunkX(), region.getCenterChunkZ());
-            clearChunk(chunk, world);
+            clearEntities(chunk, world);
         }
     }
 }

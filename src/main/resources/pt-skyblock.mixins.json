@@ -10,7 +10,8 @@
     "StructurePieceAccessor",
     "StoneBrickRandomizerMixin",
     "EnderDragonFightMixin",
-    "ItemFrameEntityMixin"
+    "ItemFrameEntityMixin",
+    "ChunkStatusMixin"
   ],
   "client": [
   ],
