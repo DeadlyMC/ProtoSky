@@ -23,6 +23,7 @@ public abstract class ChunkStatusMixin
     @Inject(method = "method_20613", at = @At("HEAD"))
     private static void onLighting(ChunkStatus chunkStatus, ServerWorld world, ChunkGenerator<?> generator, StructureManager manager, ServerLightingProvider lightingProvider, Function function, List list, Chunk chunk, CallbackInfoReturnable info)
     {
-        WorldGenUtils.deleteBlocks((ProtoChunk) chunk, world);
+        if(!chunk.getStatus().isAtLeast(chunkStatus))
+            WorldGenUtils.deleteBlocks((ProtoChunk) chunk, world);
     }
 }
