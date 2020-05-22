@@ -22,7 +22,7 @@
     ]
   },
   "mixins": [
-    "pt-skyblock.mixins.json"
+    "mixins.pt-skyblock.json"
   ],
 
   "depends": {

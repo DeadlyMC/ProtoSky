@@ -6,7 +6,7 @@ import net.minecraft.block.PaneBlock;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.gen.feature.EndSpikeFeature;
 
@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class PillarHelper
 {
-    public static void generateSpike(ProtoChunk chunk, IWorld world, Random random, EndSpikeFeature.Spike spike, EnderDragonFight fight)
+    public static void generateSpike(ProtoChunk chunk, WorldAccess world, Random random, EndSpikeFeature.Spike spike, EnderDragonFight fight)
     {
         int i = spike.getRadius();
     
