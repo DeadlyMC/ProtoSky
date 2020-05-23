@@ -5,7 +5,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.structure.NetherFortressGenerator;
 import net.minecraft.structure.StrongholdGenerator;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.structure.StructureStart;
@@ -13,10 +12,7 @@ import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.*;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.gen.feature.EndSpikeFeature;
@@ -26,8 +22,6 @@ import java.util.Random;
 
 public class StructureHelper
 {
-    public static final BlockState AIR = Blocks.CAVE_AIR.getDefaultState();
-    
     public static BlockPos getBlockInStructurePiece(StructurePiece piece, int x, int y, int z)
     {
         StructurePieceAccessor access = (StructurePieceAccessor) piece;
@@ -42,23 +36,6 @@ public class StructureHelper
         int k = access.invokeApplyZTransform(x, z);
         BlockPos blockPos = new BlockPos(i, j, k);
         return !piece.getBoundingBox().contains(blockPos) ? Blocks.AIR.getDefaultState() : blockView.getBlockState(blockPos);
-    }
-    
-    public static boolean isUnderSeaLevel(WorldView worldView, int x, int z, int y, StructurePiece piece)
-    {
-        StructurePieceAccessor access = (StructurePieceAccessor) piece;
-        int i = access.invokeApplyXTransform(x, y);
-        int j = access.invokeApplyYTransform(z + 1);
-        int k = access.invokeApplyZTransform(x, y);
-        BlockPos blockPos = new BlockPos(i, j, k);
-        if (!piece.getBoundingBox().contains(blockPos))
-        {
-            return false;
-        }
-        else
-        {
-            return j < worldView.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, i, k);
-        }
     }
     
     public static void fillWithOutline(ProtoChunk chunk, int i, int j, int k, int l, int m, int n, BlockState blockState, BlockState inside, boolean bl, StructurePiece piece)
@@ -86,49 +63,6 @@ public class StructureHelper
         
     }
     
-    public static void fillWithOutline(ProtoChunk chunk, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, boolean replaceBlocks, Random random, StructurePiece.BlockRandomizer blockRandomizer, StructurePiece piece)
-    {
-        for (int i = minY; i <= maxY; ++i)
-        {
-            for (int j = minX; j <= maxX; ++j)
-            {
-                for (int k = minZ; k <= maxZ; ++k)
-                {
-                    if (!replaceBlocks || !getBlockAt(chunk, j, i, k, piece).isAir())
-                    {
-                        blockRandomizer.setBlock(random, j, i, k, i == minY || i == maxY || j == minX || j == maxX || k == minZ || k == maxZ);
-                        setBlockInStructure(piece, chunk, blockRandomizer.getBlock(), j, i, k);
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    public static void fillWithOutlineUnderSealevel(ProtoChunk chunk, Random random, float f, int i, int j, int k, int l, int m, int n, BlockState blockState, BlockState blockState2, boolean bl, boolean bl2, StructurePiece piece)
-    {
-        for (int o = j; o <= m; ++o)
-        {
-            for (int p = i; p <= l; ++p)
-            {
-                for (int q = k; q <= n; ++q)
-                {
-                    if (random.nextFloat() <= f && (!bl || !getBlockAt(chunk, p, o, q, piece).isAir()) && (!bl2 || isUnderSeaLevel((WorldView) chunk, p, o, q, piece)))
-                    {
-                        if (o != j && o != m && p != i && p != l && q != k && q != n)
-                        {
-                            setBlockInStructure(piece, chunk, blockState2, p, o, q);
-                        }
-                        else
-                        {
-                            setBlockInStructure(piece, chunk, blockState, p, o, q);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     public static boolean addChest(ProtoChunk chunk, Random random, int x, int y, int z, Identifier lootTableId, /*@Nullable*/ BlockState block, StructurePiece piece)
     {
         StructurePieceAccessor access = (StructurePieceAccessor) piece;
@@ -152,14 +86,6 @@ public class StructureHelper
         else
         {
             return false;
-        }
-    }
-    
-    public static void addBlockWithRandomThreshold(ProtoChunk chunk, Random random, float threshold, int x, int y, int z, BlockState blockState, StructurePiece piece)
-    {
-        if (random.nextFloat() < threshold)
-        {
-            setBlockInStructure(piece, chunk, blockState, x, y, z);
         }
     }
     
@@ -216,7 +142,7 @@ public class StructureHelper
         }
     }
     
-    public static void generatePillars(ProtoChunk chunk, IWorld world, EnderDragonFight fight)
+    public static void generatePillars(ProtoChunk chunk, ServerWorldAccess world, EnderDragonFight fight)
     {
         for (EndSpikeFeature.Spike spike : EndSpikeFeature.getSpikes(world))
         {
@@ -227,25 +153,46 @@ public class StructureHelper
         }
     }
     
-    public static void processStronghold(ProtoChunk chunk, IWorld world)
+    public static void processStronghold(ProtoChunk chunk, WorldAccess world)
     {
-        for (long startPosLong : chunk.getStructureReferences("Stronghold"))
+        for (long startPosLong : chunk.getStructureReferences("stronghold"))
         {
             ChunkPos startPos = new ChunkPos(startPosLong);
             ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
-            StructureStart stronghold = startChunk.getStructureStart("Stronghold");
+            StructureStart stronghold = startChunk.getStructureStart("stronghold");
             ChunkPos pos = chunk.getPos();
             if (stronghold != null && stronghold.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
             {
-                for (StructurePiece piece : stronghold.getChildren())
+                for (Object piece : stronghold.getChildren())
                 {
-                    if (piece.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
+                    if (((StructurePiece)piece).getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
                     {
                         if (piece instanceof StrongholdGenerator.PortalRoom)
-                            StrongholdHelper.generateStrongholdPortalRoom(chunk, (StrongholdGenerator.PortalRoom) piece, new Random(startPosLong));
+                            generateStrongholdPortalRoom(chunk, (StrongholdGenerator.PortalRoom) piece, new Random(startPosLong));
                     }
                 }
             }
         }
+    }
+
+    public static void generateStrongholdPortalRoom(ProtoChunk chunk, StrongholdGenerator.PortalRoom room, Random random)
+    {
+        BlockState northFrame = Blocks.END_PORTAL_FRAME.getDefaultState().with(EndPortalFrameBlock.FACING, Direction.NORTH);
+        BlockState southFrame = Blocks.END_PORTAL_FRAME.getDefaultState().with(EndPortalFrameBlock.FACING, Direction.SOUTH);
+        BlockState eastFrame = Blocks.END_PORTAL_FRAME.getDefaultState().with(EndPortalFrameBlock.FACING, Direction.EAST);
+        BlockState westFrame = Blocks.END_PORTAL_FRAME.getDefaultState().with(EndPortalFrameBlock.FACING, Direction.WEST);
+
+        setBlockInStructure(room, chunk, northFrame, 4, 3, 8);
+        setBlockInStructure(room, chunk, northFrame, 5, 3, 8);
+        setBlockInStructure(room, chunk, northFrame, 6, 3, 8);
+        setBlockInStructure(room, chunk, southFrame, 4, 3, 12);
+        setBlockInStructure(room, chunk, southFrame, 5, 3, 12);
+        setBlockInStructure(room, chunk, southFrame, 6, 3, 12);
+        setBlockInStructure(room, chunk, eastFrame, 3, 3, 9);
+        setBlockInStructure(room, chunk, eastFrame, 3, 3, 10);
+        setBlockInStructure(room, chunk, eastFrame, 3, 3, 11);
+        setBlockInStructure(room, chunk, westFrame, 7, 3, 9);
+        setBlockInStructure(room, chunk, westFrame, 7, 3, 10);
+        setBlockInStructure(room, chunk, westFrame, 7, 3, 11);
     }
 }

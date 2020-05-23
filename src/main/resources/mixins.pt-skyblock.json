@@ -3,14 +3,9 @@
   "package": "pt.skyblock.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "LevelGeneratorOptionsMixin",
-    "TheEndDimensionMixin",
-    "TheNetherDimensionMixin",
     "ProtoChunkAccessor",
     "StructurePieceAccessor",
-    "StoneBrickRandomizerMixin",
     "EnderDragonFightMixin",
-    "ItemFrameEntityMixin",
     "ChunkStatusMixin"
   ],
   "client": [
