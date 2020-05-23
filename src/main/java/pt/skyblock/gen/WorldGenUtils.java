@@ -49,7 +49,7 @@ public class WorldGenUtils
             chunk.getEntities().removeIf(tag ->
             {
                 String id = tag.getString("id");
-                return !id.equals("minecraft:end_crystal") && !id.equals("minecraft:shulker");
+                return !id.equals("minecraft:end_crystal") && !id.equals("minecraft:shulker") && !id.equals("minecraft:item_frame");
             });
         }
     }
