@@ -1,5 +1,5 @@
-# PT-Skyblock
-Prototech skyblock mod.
+# ProtoSky
+ProtoSky skyblock mod.
 
 # Requirements (Mod users)
 - Fabric Installer : https://fabricmc.net/use/

@@ -1,4 +1,4 @@
-package pt.skyblock.gen;
+package protosky.gen;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,7 +16,7 @@ import net.minecraft.world.*;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.gen.feature.EndSpikeFeature;
-import pt.skyblock.mixins.*;
+import protosky.mixins.StructurePieceAccessor;
 
 import java.util.Random;
 

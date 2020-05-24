@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "pt.skyblock.mixins",
+  "package": "protosky.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "ProtoChunkAccessor",

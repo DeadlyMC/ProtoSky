@@ -1,4 +1,4 @@
-package pt.skyblock.gen;
+package protosky.gen;
 
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.collection.PackedIntegerArray;
@@ -8,7 +8,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
-import pt.skyblock.mixins.ProtoChunkAccessor;
+import protosky.mixins.ProtoChunkAccessor;
 
 import java.util.*;
 

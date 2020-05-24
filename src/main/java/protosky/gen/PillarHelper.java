@@ -1,4 +1,4 @@
-package pt.skyblock.gen;
+package protosky.gen;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
