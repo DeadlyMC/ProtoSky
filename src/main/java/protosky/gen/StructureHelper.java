@@ -16,6 +16,8 @@ import net.minecraft.world.*;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.gen.feature.EndSpikeFeature;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.StructureFeature;
 import protosky.mixins.StructurePieceAccessor;
 
 import java.util.Random;
@@ -155,11 +157,11 @@ public class StructureHelper
     
     public static void processStronghold(ProtoChunk chunk, WorldAccess world)
     {
-        for (long startPosLong : chunk.getStructureReferences("stronghold"))
+        for (long startPosLong : chunk.getStructureReferences(StructureFeature.STRONGHOLD))
         {
             ChunkPos startPos = new ChunkPos(startPosLong);
             ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
-            StructureStart stronghold = startChunk.getStructureStart("stronghold");
+            StructureStart stronghold = startChunk.getStructureStart(StructureFeature.STRONGHOLD);
             ChunkPos pos = chunk.getPos();
             if (stronghold != null && stronghold.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
             {

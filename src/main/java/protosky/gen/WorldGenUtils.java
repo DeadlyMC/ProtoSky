@@ -4,6 +4,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ProtoChunk;
@@ -30,8 +31,8 @@ public class WorldGenUtils
         }
         StructureHelper.processStronghold(chunk, world);
 
-        if (world.getDimension().isEnd())
-            StructureHelper.generatePillars(chunk, world, world.method_29198());
+        if (world.getRegistryKey() == World.END)
+            StructureHelper.generatePillars(chunk, world, world.getEnderDragonFight());
 
         Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
     }
@@ -40,7 +41,7 @@ public class WorldGenUtils
     public static void clearEntities(ProtoChunk chunk, WorldAccess world)
     {
         // erase entities
-        if (!world.getDimension().isEnd())
+        if (world.getWorld().getRegistryKey() != World.END)
         {
             chunk.getEntities().clear();
         }
