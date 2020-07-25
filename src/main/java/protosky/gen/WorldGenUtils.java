@@ -51,8 +51,6 @@ public class WorldGenUtils
 
         if (world.getRegistryKey() == World.END)
             StructureHelper.generatePillars(chunk, world, world.getEnderDragonFight());
-
-        Heightmap.populateHeightmaps(chunk, EnumSet.allOf(Heightmap.Type.class));
     }
 
 
