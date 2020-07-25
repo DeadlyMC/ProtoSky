@@ -1,11 +1,29 @@
 package protosky.gen;
 
+import net.fabricmc.fabric.api.util.NbtType;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.StonecutterBlock;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.Property;
+import net.minecraft.structure.Structure;
+import net.minecraft.structure.StructureManager;
+import net.minecraft.structure.StructurePlacementData;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
@@ -53,5 +71,58 @@ public class WorldGenUtils
                 return !id.equals("minecraft:end_crystal") && !id.equals("minecraft:shulker") && !id.equals("minecraft:item_frame");
             });
         }
+    }
+
+    public static void genSpawnPlatform(Chunk chunk, ServerWorld world) {
+        StructureManager man = world.getStructureManager();
+        Structure s = null;
+
+        // Get structure for this dimension
+        if (world.getRegistryKey() == World.OVERWORLD) {
+            s = man.getStructure(new Identifier("protosky:spawn_overworld"));
+        } else if (world.getRegistryKey() == World.NETHER) {
+            s = man.getStructure(new Identifier("protosky:spawn_nether"));
+        }
+        if (s == null) return;
+        CompoundTag t = new CompoundTag();
+
+        // s.place would call world.getChunk, causing it to hang.
+        // Hence, I've reimplemented spawning a structure.
+        // The limitation here is that the structure is limited to 16 blocks,
+        // and assumes it centers around (8, 0, 8).
+        // Other limitations for this implementation are:
+        // - No support for BlockEntities
+        // - No support for Entities
+        // Additionally, this platform is spawned at Y=64 with no way to configure this.
+
+        s.toTag(t);
+
+        // Collect the palette
+        Map<Integer, BlockState> map = new HashMap<>();
+        ListTag palette = t.getList("palette", NbtType.COMPOUND);
+        for (int i = 0; i < palette.size(); i++) {
+            CompoundTag e = palette.getCompound(i);
+            map.put(i, NbtHelper.toBlockState(e));
+        }
+        BlockPos.Mutable relStart = chunk.getPos().getCenterBlockPos().mutableCopy();
+        relStart.setY(64);
+
+        // Place the blocks in the chunk
+        BlockPos highest = BlockPos.ORIGIN;
+        ListTag blocks = t.getList("blocks", NbtType.COMPOUND);
+        for (int i = 0; i < blocks.size(); i++) {
+            CompoundTag b = blocks.getCompound(i);
+            BlockState st = map.get(b.getInt("state"));
+            ListTag t2 = b.getList("pos", NbtType.INT);
+            BlockPos p = relStart.add(new BlockPos(t2.getInt(0), t2.getInt(1), t2.getInt(2)));
+            if (p.getY() > highest.getY()) {
+                highest = p;
+            }
+            chunk.setBlockState(p, st, false);
+        }
+
+        // Because of the way we spawn the structure, it's common to fall into the void next to it.
+        // As solution, we simply set the world spawn on top of said structure.
+        world.setSpawnPos(highest.up());
     }
 }
