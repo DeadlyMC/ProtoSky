@@ -1,25 +1,15 @@
 package protosky.gen;
 
-import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.StonecutterBlock;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Property;
 import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
@@ -97,7 +87,7 @@ public class WorldGenUtils
 
         // Collect the palette
         Map<Integer, BlockState> map = new HashMap<>();
-        ListTag palette = t.getList("palette", NbtType.COMPOUND);
+        ListTag palette = t.getList("palette", 10);
         for (int i = 0; i < palette.size(); i++) {
             CompoundTag e = palette.getCompound(i);
             map.put(i, NbtHelper.toBlockState(e));
@@ -107,11 +97,11 @@ public class WorldGenUtils
 
         // Place the blocks in the chunk
         BlockPos highest = BlockPos.ORIGIN;
-        ListTag blocks = t.getList("blocks", NbtType.COMPOUND);
+        ListTag blocks = t.getList("blocks", 10);
         for (int i = 0; i < blocks.size(); i++) {
             CompoundTag b = blocks.getCompound(i);
             BlockState st = map.get(b.getInt("state"));
-            ListTag t2 = b.getList("pos", NbtType.INT);
+            ListTag t2 = b.getList("pos", 3);
             BlockPos p = relStart.add(new BlockPos(t2.getInt(0), t2.getInt(1), t2.getInt(2)));
             if (p.getY() > highest.getY()) {
                 highest = p;
