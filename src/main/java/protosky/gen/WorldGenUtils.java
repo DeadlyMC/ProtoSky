@@ -1,11 +1,7 @@
 package protosky.gen;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtHelper;
-import net.minecraft.server.network.SpawnLocating;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
@@ -14,15 +10,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.PackedIntegerArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.*;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
 import protosky.mixins.ProtoChunkAccessor;
 
 import java.util.*;
@@ -50,10 +42,10 @@ public class WorldGenUtils
     }
 
 
-    public static void clearEntities(ProtoChunk chunk, WorldAccess world)
+    public static void clearEntities(ProtoChunk chunk, ServerWorldAccess world)
     {
         // erase entities
-        if (world.getWorld().getRegistryKey() != World.END)
+        if (world.toServerWorld().getRegistryKey() != World.END)
         {
             chunk.getEntities().clear();
         }
@@ -80,7 +72,10 @@ public class WorldGenUtils
         if (s == null) return;
         CompoundTag t = new CompoundTag();
 
-        s.place(new ChunkRegion(world, ImmutableList.of(chunk)), chunk.getPos().toBlockPos(0,64,0), new StructurePlacementData().setUpdateNeighbors(true), new Random());
-        world.setSpawnPos(chunk.getPos().toBlockPos(s.getSize().getX() / 2, 64 + s.getSize().getY() + 1, s.getSize().getZ() / 2));
+        ChunkPos chunkPos = chunk.getPos();
+        BlockPos blockPos = new BlockPos(chunkPos.x * 8, 64, chunkPos.z * 8);
+
+        s.place(new ChunkRegion(world, ImmutableList.of(chunk)), blockPos, new StructurePlacementData().setUpdateNeighbors(true), new Random());
+        world.setSpawnPos(blockPos.add(s.getSize().getX() / 2, s.getSize().getY() + 1, s.getSize().getZ() / 2), 0);
     }
 }

@@ -143,7 +143,7 @@ public class StructureHelper
         }
     }
     
-    public static void generatePillars(ProtoChunk chunk, ServerWorldAccess world, EnderDragonFight fight)
+    public static void generatePillars(ProtoChunk chunk, StructureWorldAccess world, EnderDragonFight fight)
     {
         for (EndSpikeFeature.Spike spike : EndSpikeFeature.getSpikes(world))
         {
