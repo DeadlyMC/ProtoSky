@@ -64,31 +64,31 @@ public class StructureHelper
         
     }
     
-    public static boolean addChest(ProtoChunk chunk, Random random, int x, int y, int z, Identifier lootTableId, /*@Nullable*/ BlockState block, StructurePiece piece)
-    {
-        StructurePieceAccessor access = (StructurePieceAccessor) piece;
-        BlockPos pos = new BlockPos(access.invokeApplyXTransform(x, z), access.invokeApplyYTransform(y), access.invokeApplyZTransform(x, z));
-        if (piece.getBoundingBox().contains(pos) && chunk.getBlockState(pos).getBlock() != Blocks.CHEST)
-        {
-            if (block == null)
-            {
-                block = StructurePiece.method_14916(chunk, pos, Blocks.CHEST.getDefaultState());
-            }
-            
-            setBlockInChunk(chunk, pos, block);
-            BlockEntity blockEntity = chunk.getBlockEntity(pos);
-            if (blockEntity instanceof ChestBlockEntity)
-            {
-                ((ChestBlockEntity) blockEntity).setLootTable(lootTableId, random.nextLong());
-            }
-            
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+//    public static boolean addChest(ProtoChunk chunk, Random random, int x, int y, int z, Identifier lootTableId, /*@Nullable*/ BlockState block, StructurePiece piece)
+//    {
+//        StructurePieceAccessor access = (StructurePieceAccessor) piece;
+//        BlockPos pos = new BlockPos(access.invokeApplyXTransform(x, z), access.invokeApplyYTransform(y), access.invokeApplyZTransform(x, z));
+//        if (piece.getBoundingBox().contains(pos) && chunk.getBlockState(pos).getBlock() != Blocks.CHEST)
+//        {
+//            if (block == null)
+//            {
+//                block = StructurePiece.method_14916(chunk, pos, Blocks.CHEST.getDefaultState());
+//            }
+//
+//            setBlockInChunk(chunk, pos, block);
+//            BlockEntity blockEntity = chunk.getBlockEntity(pos);
+//            if (blockEntity instanceof ChestBlockEntity)
+//            {
+//                ((ChestBlockEntity) blockEntity).setLootTable(lootTableId, random.nextLong());
+//            }
+//
+//            return true;
+//        }
+//        else
+//        {
+//            return false;
+//        }
+//    }
     
     public static void setBlockInStructure(StructurePiece piece, ProtoChunk chunk, BlockState state, int x, int y, int z)
     {
