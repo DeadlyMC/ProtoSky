@@ -24,7 +24,7 @@ import java.util.function.Function;
 public abstract class ChunkStatusMixin
 {
     // LIGHT
-    @Inject(method = "method_20613", at = @At("HEAD"))
+    @Inject(method = "LoadTask", at = @At("HEAD"))
     private static void onLighting(ChunkStatus chunkStatus, ServerWorld world, ChunkGenerator generator, StructureManager manager, ServerLightingProvider lightingProvider, Function function, List list, Chunk chunk, CallbackInfoReturnable info)
     {
         if(!chunk.getStatus().isAtLeast(chunkStatus)) {
@@ -37,7 +37,7 @@ public abstract class ChunkStatusMixin
     }
     
     // SPAWN -> populateEntities
-    @Inject(method = "method_16566", at = @At("RETURN"))
+    @Inject(method = "SimpleGenerationTask", at = @At("RETURN"))
     private static void afterPopulation(ServerWorld world, ChunkGenerator generator, List list, Chunk chunk, CallbackInfo info) {
         WorldGenUtils.clearEntities((ProtoChunk)chunk, world);
     }

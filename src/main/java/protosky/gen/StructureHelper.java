@@ -72,7 +72,7 @@ public class StructureHelper
         {
             if (block == null)
             {
-                block = StructurePiece.method_14916(chunk, pos, Blocks.CHEST.getDefaultState());
+                block = StructurePiece.orientateChest(chunk, pos, Blocks.CHEST.getDefaultState());
             }
             
             setBlockInChunk(chunk, pos, block);
