@@ -4,7 +4,6 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.StrongholdGenerator;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.structure.StructureStart;
@@ -114,19 +113,7 @@ public class StructureHelper
             chunk.setBlockState(pos, state, false);
         }
     }
-    
-    public static void setBlockEntityInChunk(ProtoChunk chunk, BlockPos pos, CompoundTag tag)
-    {
-        if (chunk.getPos().equals(new ChunkPos(pos)))
-        {
-            tag.putInt("x", pos.getX());
-            tag.putInt("y", pos.getY());
-            tag.putInt("z", pos.getZ());
-            System.out.println(tag);
-            chunk.addPendingBlockEntityTag(tag);
-        }
-    }
-    
+
     public static void fillAirAndLiquidDownwards(ProtoChunk chunk, BlockState blockState, int x, int y, int z, StructurePiece piece)
     {
         StructurePieceAccessor access = (StructurePieceAccessor) piece;
@@ -162,7 +149,8 @@ public class StructureHelper
             ProtoChunk startChunk = (ProtoChunk) world.getChunk(startPos.x, startPos.z, ChunkStatus.STRUCTURE_STARTS);
             StructureStart stronghold = startChunk.getStructureStart(StructureFeature.STRONGHOLD);
             ChunkPos pos = chunk.getPos();
-            if (stronghold != null && stronghold.getBoundingBox().intersectsXZ(pos.getStartX(), pos.getStartZ(), pos.getEndX(), pos.getEndZ()))
+            BlockBox posBox = new BlockBox(pos.getStartX(), world.getBottomY(), pos.getStartZ(), pos.getEndX(), world.getTopY(), pos.getEndZ());
+            if (stronghold != null && stronghold.getIntersecting(posBox) != null)
             {
                 for (Object piece : stronghold.getChildren())
                 {
