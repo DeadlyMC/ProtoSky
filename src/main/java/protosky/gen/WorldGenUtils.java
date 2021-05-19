@@ -31,7 +31,7 @@ public class WorldGenUtils
         long[] emptyHeightmap = new PackedIntegerArray(9, 256).getStorage();
         for (Map.Entry<Heightmap.Type, Heightmap> heightmapEntry : chunk.getHeightmaps())
         {
-            heightmapEntry.getValue().setTo(emptyHeightmap);
+            heightmapEntry.getValue().setTo(chunk, heightmapEntry.getKey(), emptyHeightmap);
         }
         StructureHelper.processStronghold(chunk, world);
 
@@ -63,9 +63,15 @@ public class WorldGenUtils
 
         // Get structure for this dimension
         if (world.getRegistryKey() == World.OVERWORLD) {
-            s = man.getStructure(new Identifier("protosky:spawn_overworld"));
+            Optional<Structure> op = man.getStructure(new Identifier("protosky:spawn_overworld"));
+            if (op.isPresent()) {
+                s = op.get();
+            }
         } else if (world.getRegistryKey() == World.NETHER) {
-            s = man.getStructure(new Identifier("protosky:spawn_nether"));
+            Optional<Structure> op = man.getStructure(new Identifier("protosky:spawn_nether"));
+            if (op.isPresent()) {
+                s = op.get();
+            }
         }
         if (s == null) return;
 

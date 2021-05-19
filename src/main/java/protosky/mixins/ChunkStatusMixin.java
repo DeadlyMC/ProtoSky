@@ -39,7 +39,7 @@ public abstract class ChunkStatusMixin
 
     // SPAWN -> populateEntities
     @Inject(method = "method_16566", at = @At("RETURN"))
-    private static void afterPopulation(ServerWorld world, ChunkGenerator generator, List list, Chunk chunk, CallbackInfo info) {
+    private static void afterPopulation(ChunkStatus chunkStatus, ServerWorld world, ChunkGenerator generator, List list, Chunk chunk, CallbackInfo info) {
         WorldGenUtils.clearEntities((ProtoChunk)chunk, world);
     }
 }
