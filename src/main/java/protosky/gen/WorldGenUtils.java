@@ -1,7 +1,5 @@
 package protosky.gen;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
@@ -33,7 +31,7 @@ public class WorldGenUtils
         long[] emptyHeightmap = new PackedIntegerArray(9, 256).getStorage();
         for (Map.Entry<Heightmap.Type, Heightmap> heightmapEntry : chunk.getHeightmaps())
         {
-            heightmapEntry.getValue().setTo(emptyHeightmap);
+            heightmapEntry.getValue().setTo(chunk, heightmapEntry.getKey(), emptyHeightmap);
         }
         StructureHelper.processStronghold(chunk, world);
 
@@ -65,17 +63,25 @@ public class WorldGenUtils
 
         // Get structure for this dimension
         if (world.getRegistryKey() == World.OVERWORLD) {
-            s = man.getStructure(new Identifier("protosky:spawn_overworld"));
+            Optional<Structure> op = man.getStructure(new Identifier("protosky:spawn_overworld"));
+            if (op.isPresent()) {
+                s = op.get();
+            }
         } else if (world.getRegistryKey() == World.NETHER) {
-            s = man.getStructure(new Identifier("protosky:spawn_nether"));
+            Optional<Structure> op = man.getStructure(new Identifier("protosky:spawn_nether"));
+            if (op.isPresent()) {
+                s = op.get();
+            }
         }
         if (s == null) return;
-        CompoundTag t = new CompoundTag();
 
         ChunkPos chunkPos = chunk.getPos();
         BlockPos blockPos = new BlockPos(chunkPos.x * 8, 64, chunkPos.z * 8);
 
-        s.place(new ChunkRegion(world, ImmutableList.of(chunk)), blockPos, new StructurePlacementData().setUpdateNeighbors(true), new Random());
+        StructurePlacementData structurePlacementData = new StructurePlacementData().setUpdateNeighbors(true);
+        Random random = new Random();
+        int flags = 0;
+        s.place(world, blockPos, blockPos, structurePlacementData, random, flags);
         world.setSpawnPos(blockPos.add(s.getSize().getX() / 2, s.getSize().getY() + 1, s.getSize().getZ() / 2), 0);
     }
 }
